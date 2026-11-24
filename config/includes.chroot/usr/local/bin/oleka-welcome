@@ -1,0 +1,6 @@
+#!/bin/sh
+# One-time hint on first login. Marker file keeps it from repeating.
+m="$HOME/.cache/oleka-welcome-shown"
+[ -e "$m" ] && exit 0
+mkdir -p "$HOME/.cache" && : > "$m"
+foot -T "Welcome to Oleka Desktop" sh -c 'printf "Super+D launcher\nSuper+Enter terminal\nSuper+Shift+E exit\n\nPress Enter to close. "; read x'

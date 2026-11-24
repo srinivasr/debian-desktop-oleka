@@ -1,0 +1,8 @@
+[Unit]
+Description=Oleka boot self-test (prints marker on serial)
+After=multi-user.target systemd-user-sessions.service
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/oleka-boot-check
+[Install]
+WantedBy=multi-user.target

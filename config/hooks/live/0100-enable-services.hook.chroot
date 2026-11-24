@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+systemctl enable oleka-boot-check.service
+systemctl enable NetworkManager.service
+# autologin on tty1 for the live user
+mkdir -p /etc/systemd/system/getty@tty1.service.d
+cat > /etc/systemd/system/getty@tty1.service.d/autologin.conf <<EOT
+[Service]
+ExecStart=
+ExecStart=-/sbin/agetty --autologin oleka --noclear %I \$TERM
+EOT

@@ -1,0 +1,9 @@
+#!/bin/sh
+# Waybar custom module (our addition to stock waybar): memory use and load.
+# Prints one JSON object; the class drives colour in style.css.
+mem=$(awk '/MemTotal/{t=$2} /MemAvailable/{a=$2} END{printf "%d", (t-a)*100/t}' /proc/meminfo)
+load=$(cut -d' ' -f1 /proc/loadavg)
+cores=$(nproc)
+cls=ok
+if [ "$(echo "$load $cores" | awk '{print ($1 > $2) ? 1 : 0}')" = 1 ]; then cls=busy; fi
+printf '{"text":"mem %s%%","tooltip":"load %s on %s cores","class":"%s"}\n' "$mem" "$load" "$cores" "$cls"

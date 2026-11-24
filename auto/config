@@ -1,0 +1,23 @@
+#!/bin/sh
+# live-build configuration. Reproducibility: the package set is pinned to a
+# snapshot.debian.org timestamp and SOURCE_DATE_EPOCH is fixed (see scripts/build.sh).
+set -e
+SNAPSHOT="${SNAPSHOT:-20251101T000000Z}"
+MIRROR="http://snapshot.debian.org/archive/debian/${SNAPSHOT}/"
+lb config noauto \
+  --distribution trixie \
+  --architectures amd64 \
+  --archive-areas "main contrib non-free-firmware" \
+  --mirror-bootstrap "${MIRROR}" \
+  --mirror-chroot "${MIRROR}" \
+  --mirror-binary "${MIRROR}" \
+  --parent-mirror-bootstrap "${MIRROR}" \
+  --parent-mirror-chroot "${MIRROR}" \
+  --security false --updates false \
+  --binary-images iso-hybrid \
+  --bootappend-live "boot=live components quiet splash username=oleka hostname=oleka-desktop" \
+  --iso-application "Oleka Desktop" --iso-volume "OLEKA_DESKTOP" \
+  --debian-installer none \
+  --apt-indices false \
+  --memtest none \
+  "${@}"

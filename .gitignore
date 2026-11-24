@@ -1,0 +1,12 @@
+binary*
+chroot*
+cache/
+.build/
+*.iso
+live-image*
+*.log
+__pycache__/
+.pytest_cache/
+config/includes.chroot/usr/local/lib/oleka-launcher/
+config/includes.chroot/usr/local/share/oleka-launcher/
+config/includes.chroot/usr/local/bin/oleka-launcher

@@ -1,0 +1,12 @@
+/* Layout only. Colours and font are in palette.css, generated from theme/palette.toml. */
+@import "palette.css";
+window#waybar { background: transparent; color: @text; }
+.modules-left, .modules-center, .modules-right { background: @bg; border: 1px solid @surface; padding: 0 8px; }
+#workspaces button { color: @muted; padding: 0 8px; background: transparent; border: none; }
+#workspaces button.focused { color: @bg; background: @accent; }
+#workspaces button.urgent { background: @urgent; color: @bg; }
+#clock, #network, #pulseaudio, #battery, #custom-oleka-status { padding: 0 10px; }
+#battery.warning { color: @warn; }
+#battery.critical { color: @urgent; }
+#custom-oleka-status.busy { color: @warn; }
+#custom-oleka-status.ok { color: @accent; }

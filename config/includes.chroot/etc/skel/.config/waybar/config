@@ -1,0 +1,20 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 34,
+  "margin": "6 8 0 8",
+  "modules-left": ["sway/workspaces", "sway/mode"],
+  "modules-center": ["clock"],
+  "modules-right": ["custom/oleka-status", "pulseaudio", "network", "battery"],
+  "sway/workspaces": { "disable-scroll": true, "format": "{name}" },
+  "clock": { "format": "{:%a %d %b  %H:%M}", "tooltip-format": "{:%A %d %B %Y}" },
+  "network": { "format-wifi": "wifi {signalStrength}%", "format-ethernet": "eth", "format-disconnected": "offline" },
+  "pulseaudio": { "format": "vol {volume}%", "format-muted": "muted" },
+  "battery": { "format": "bat {capacity}%", "states": { "warning": 25, "critical": 10 } },
+  "custom/oleka-status": {
+    "exec": "oleka-status",
+    "return-type": "json",
+    "interval": 5,
+    "tooltip": true
+  }
+}

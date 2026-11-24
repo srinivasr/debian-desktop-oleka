@@ -1,0 +1,33 @@
+# compositor and session
+sway
+swaybg
+swayidle
+swaylock
+xwayland
+foot
+# customised component (panel) and helpers
+waybar
+fonts-inter
+fonts-noto-core
+fonts-jetbrains-mono
+fonts-font-awesome
+# the from-scratch launcher needs these
+python3
+python3-gi
+gir1.2-gtk-3.0
+gir1.2-gtklayershell-0.1
+# basics
+grim
+wl-clipboard
+network-manager
+pipewire
+pipewire-pulse
+wireplumber
+dbus-user-session
+live-boot
+live-config
+live-config-systemd
+systemd-sysv
+linux-image-amd64
+firefox-esr
+python3-pytest

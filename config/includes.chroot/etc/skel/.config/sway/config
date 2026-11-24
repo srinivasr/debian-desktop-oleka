@@ -1,0 +1,42 @@
+# Oleka Desktop: sway session. Colours come from colors.conf (generated from theme/palette.toml).
+include ~/.config/sway/colors.conf
+
+set $mod Mod4
+set $term foot
+font pango:Inter 10
+default_border pixel 2
+gaps inner 8
+gaps outer 4
+
+output * bg $bg solid_color
+input type:keyboard xkb_layout us
+input type:touchpad tap enabled
+
+bindsym $mod+Return exec $term
+bindsym $mod+d exec oleka-launcher
+bindsym $mod+Shift+q kill
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+e exit
+bindsym $mod+f fullscreen
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+h focus left
+bindsym $mod+l focus right
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+Shift+s exec sh -c 'grim ~/screenshot-$(date +%s).png'
+floating_modifier $mod normal
+
+bindsym $mod+1 workspace number 1
+bindsym $mod+2 workspace number 2
+bindsym $mod+3 workspace number 3
+bindsym $mod+4 workspace number 4
+bindsym $mod+Shift+1 move container to workspace number 1
+bindsym $mod+Shift+2 move container to workspace number 2
+bindsym $mod+Shift+3 move container to workspace number 3
+bindsym $mod+Shift+4 move container to workspace number 4
+
+bar {
+    swaybar_command waybar
+}
+
+exec_always sh -c 'pgrep -x oleka-welcome || oleka-welcome'

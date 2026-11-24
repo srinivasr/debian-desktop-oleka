@@ -1,0 +1,16 @@
+#!/bin/sh
+# Boot self-test for CI. Runs headless sway, checks the pieces, prints a marker on the serial console.
+fail=0
+for b in sway waybar foot oleka-launcher oleka-status; do
+  command -v "$b" >/dev/null || { echo "OLEKA-MISSING $b" > /dev/ttyS0; fail=1; }
+done
+for f in /etc/skel/.config/sway/colors.conf /etc/skel/.config/waybar/palette.css /usr/local/share/oleka-launcher/style.css; do
+  [ -e "$f" ] || { echo "OLEKA-MISSING $f" > /dev/ttyS0; fail=1; }
+done
+mkdir -p /run/user/1000 && chown oleka:oleka /run/user/1000 && chmod 700 /run/user/1000
+export XDG_RUNTIME_DIR=/run/user/1000 WLR_BACKENDS=headless WLR_LIBINPUT_NO_DEVICES=1
+if ! timeout 10 su oleka -c 'sway --config /etc/skel/.config/sway/config -d >/tmp/sway.log 2>&1 & sleep 5; pgrep -x sway' >/dev/null; then
+  echo "OLEKA-SWAY-FAILED" > /dev/ttyS0; fail=1
+fi
+[ "$fail" = 0 ] && echo "OLEKA-BOOT-OK" > /dev/ttyS0
+exit 0
