@@ -1,0 +1,15 @@
+# Single source of truth for the Oleka desktop theme.
+# scripts/gen-theme.py renders every component's colours from this file.
+name = "oleka-night"
+font = "Inter, Noto Sans"
+mono = "JetBrains Mono, DejaVu Sans Mono"
+radius = 10
+
+[colors]
+bg      = "#1e1e2e"
+surface = "#313244"
+text    = "#cdd6f4"
+muted   = "#6c7086"
+accent  = "#89b4fa"
+warn    = "#f9e2af"
+urgent  = "#f38ba8"
