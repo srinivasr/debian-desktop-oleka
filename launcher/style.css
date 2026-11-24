@@ -1,0 +1,19 @@
+/* Palette. Change these six lines to re-theme. */
+@define-color bg      #1e1e2e;
+@define-color surface #313244;
+@define-color text    #cdd6f4;
+@define-color accent  #89b4fa;
+@define-color muted   #6c7086;
+
+window.olekalauncher { background: @bg; border: 2px solid @accent; border-radius: 10px;
+                       font-family: "Inter", "Noto Sans", sans-serif; }
+window.olekalauncher entry { background: @surface; color: @text; border: none; border-radius: 10px;
+                             margin: 12px; padding: 10px 12px; font-size: 16px; }
+window.olekalauncher list { background: transparent; }
+window.olekalauncher row { background: transparent; margin: 0 12px 4px 12px; border-radius: 10px; }
+window.olekalauncher row:selected { background: @accent; }
+window.olekalauncher .result { padding: 8px; }
+window.olekalauncher .name { color: @text; font-size: 14px; }
+window.olekalauncher .comment { color: @muted; font-size: 11px; }
+window.olekalauncher row:selected .name,
+window.olekalauncher row:selected .comment { color: @bg; }
