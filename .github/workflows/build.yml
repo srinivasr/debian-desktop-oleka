@@ -1,0 +1,34 @@
+name: build-iso
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  tests:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install pytest
+      - run: python3 scripts/gen-theme.py && python3 -m pytest -q tests launcher/tests
+  iso:
+    needs: tests
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build inside a Debian trixie container
+        run: |
+          docker run --rm --privileged -v "$PWD":/w -w /w debian:trixie bash -c '
+            apt-get update && apt-get install -y live-build git python3 sudo ca-certificates xorriso squashfs-tools &&
+            git config --global --add safe.directory /w &&
+            sh scripts/build.sh'
+      - name: QEMU boot test
+        run: |
+          sudo apt-get update && sudo apt-get install -y qemu-system-x86
+          sh scripts/qemu-test.sh oleka-desktop.iso
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: oleka-desktop
+          path: |
+            oleka-desktop.iso
+            oleka-desktop.sha256
+            qemu-serial.log
