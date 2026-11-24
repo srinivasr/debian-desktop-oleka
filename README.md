@@ -11,7 +11,9 @@ A small Debian-based live ISO with a Wayland desktop. Built for the Oleka Labs t
 
 ## Build and test
 
-CI does this on every push (see `.github/workflows/build.yml`). To do it by hand on Debian:
+CircleCI builds the ISO and boot-tests it on every push (`.circleci/config.yml`). The GitHub Actions workflow
+(`.github/workflows/build.yml`) does the same, but Actions is disabled on the account that holds this repo, so it has not run.
+Without CI, `sh scripts/build-docker.sh` does the same on any machine with Docker and QEMU. By hand on Debian 13:
 
     sudo apt install live-build qemu-system-x86 xorriso git make python3
     sudo sh scripts/build.sh                    # makes oleka-desktop.iso and oleka-desktop.sha256
