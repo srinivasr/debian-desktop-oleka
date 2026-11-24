@@ -10,7 +10,7 @@ $RT run --rm --privileged -v "$PWD":/w -w /w debian:trixie bash -c '
   sh scripts/build.sh'
 echo "ISO: $PWD/oleka-desktop.iso"
 if command -v qemu-system-x86_64 >/dev/null; then
-  KVM=$([ -w /dev/kvm ] && echo 1) sh scripts/qemu-test.sh oleka-desktop.iso
+  sh scripts/qemu-test.sh oleka-desktop.iso
 else
   echo "qemu-system-x86_64 not found, skipping the boot test"
 fi

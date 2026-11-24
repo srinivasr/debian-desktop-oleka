@@ -25,7 +25,7 @@ jobs:
           name: QEMU boot test
           command: |
             sudo apt-get update && sudo apt-get install -y qemu-system-x86
-            KVM=1 sh scripts/qemu-test.sh oleka-desktop.iso
+            sh scripts/qemu-test.sh oleka-desktop.iso
       - store_artifacts:
           path: qemu-serial.log
       - store_artifacts:
