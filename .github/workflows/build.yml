@@ -17,7 +17,7 @@ jobs:
       - name: Build inside a Debian trixie container
         run: |
           docker run --rm --privileged -v "$PWD":/w -w /w debian:trixie bash -c '
-            apt-get update && apt-get install -y live-build git python3 sudo ca-certificates xorriso squashfs-tools &&
+            apt-get update && apt-get install -y live-build git python3 make sudo ca-certificates xorriso squashfs-tools &&
             git config --global --add safe.directory /w &&
             sh scripts/build.sh'
       - name: QEMU boot test

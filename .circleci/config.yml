@@ -1,0 +1,38 @@
+# Same pipeline as .github/workflows/build.yml, for CircleCI (free plan works for private repos).
+version: 2.1
+jobs:
+  build-iso:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large
+    steps:
+      - checkout
+      - run:
+          name: Unit tests
+          command: |
+            pip install pytest
+            python3 scripts/gen-theme.py
+            python3 -m pytest -q tests launcher/tests
+      - run:
+          name: Build ISO in a Debian trixie container
+          no_output_timeout: 60m
+          command: |
+            docker run --rm --privileged -v "$PWD":/w -w /w debian:trixie bash -c '
+              apt-get update && apt-get install -y live-build git python3 make sudo ca-certificates xorriso squashfs-tools &&
+              git config --global --add safe.directory /w &&
+              sh scripts/build.sh'
+      - run:
+          name: QEMU boot test
+          command: |
+            sudo apt-get update && sudo apt-get install -y qemu-system-x86
+            KVM=1 sh scripts/qemu-test.sh oleka-desktop.iso
+      - store_artifacts:
+          path: qemu-serial.log
+      - store_artifacts:
+          path: oleka-desktop.sha256
+      - store_artifacts:
+          path: oleka-desktop.iso
+workflows:
+  build:
+    jobs:
+      - build-iso
