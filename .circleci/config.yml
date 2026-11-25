@@ -91,13 +91,18 @@ jobs:
           command: |
             mkdir -p cmp a b
             sha256sum first/oleka-desktop.iso oleka-desktop.iso | tee cmp/sums.txt
-            xorriso -osirrox on -indev first/oleka-desktop.iso -extract /live/filesystem.squashfs a/fs.squashfs 2>/dev/null || true
-            xorriso -osirrox on -indev oleka-desktop.iso -extract /live/filesystem.squashfs b/fs.squashfs 2>/dev/null || true
-            sha256sum a/fs.squashfs b/fs.squashfs | tee -a cmp/sums.txt || true
+            xorriso -osirrox on -indev first/oleka-desktop.iso -extract /live a 2>/dev/null || true
+            xorriso -osirrox on -indev oleka-desktop.iso -extract /live b 2>/dev/null || true
+            (cd a && sha256sum * ) | sed 's|  | first/live/|' | tee -a cmp/sums.txt
+            (cd b && sha256sum * ) | sed 's|  | second/live/|' | tee -a cmp/sums.txt
             if cmp -s first/oleka-desktop.iso oleka-desktop.iso; then echo IDENTICAL > cmp/result.txt; else echo DIFFERENT > cmp/result.txt; fi
             cat cmp/result.txt
             cmp -l first/oleka-desktop.iso oleka-desktop.iso | wc -l > cmp/differing-bytes.txt || true
             cat cmp/differing-bytes.txt
+            cmp -l first/oleka-desktop.iso oleka-desktop.iso | awk 'NR==1{lo=$1} {hi=$1} END{print "first differing byte offset", lo, "last", hi}' | tee cmp/offsets.txt
+            xorriso -indev first/oleka-desktop.iso -pvd_info 2>&1 | grep -iE "time|uuid|id" > cmp/pvd-first.txt || true
+            xorriso -indev oleka-desktop.iso -pvd_info 2>&1 | grep -iE "time|uuid|id" > cmp/pvd-second.txt || true
+            diff cmp/pvd-first.txt cmp/pvd-second.txt | tee cmp/pvd-diff.txt || true
       - store_artifacts:
           path: cmp
           destination: cmp
