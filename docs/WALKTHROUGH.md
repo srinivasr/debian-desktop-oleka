@@ -17,7 +17,7 @@
 
 ## 2-minute demo script
 
-0:00 Show the repo and the CI run (build and boot test).
+0:00 Show the repo and the CI run (build and boot test pass; the reproducibility check shows the ISO is not bit-identical).
 0:20 Boot the ISO in QEMU. It reaches the desktop by itself.
 0:45 Point at the panel: workspaces, clock, the `mem` module (ours).
 1:05 Press Super+D, type "fire", launch Firefox. Press Esc on another open.

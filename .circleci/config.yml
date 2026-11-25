@@ -70,6 +70,36 @@ jobs:
       - store_artifacts:
           path: shots
           destination: shots
+  repro-check:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large
+    steps:
+      - checkout
+      - attach_workspace:
+          at: first
+      - run:
+          name: Rebuild the ISO from the same commit
+          no_output_timeout: 60m
+          command: |
+            docker run --rm --privileged -v "$PWD":/w -w /w debian:trixie bash -c '
+              apt-get update && apt-get install -y live-build git python3 make sudo ca-certificates xorriso squashfs-tools &&
+              git config --global --add safe.directory /w &&
+              sh scripts/build.sh'
+      - run:
+          name: Compare the two builds
+          command: |
+            mkdir -p cmp
+            sha256sum first/oleka-desktop.iso oleka-desktop.iso | tee cmp/sums.txt
+            for i in first/oleka-desktop.iso oleka-desktop.iso; do
+              mkdir -p x$$; xorriso -osirrox on -indev $i -extract /live/filesystem.squashfs x$$/$(basename $(dirname $i)).squashfs 2>/dev/null || true
+            done
+            sha256sum x*/*.squashfs | tee -a cmp/sums.txt
+            if [ "$(sha256sum < first/oleka-desktop.iso)" = "$(sha256sum < oleka-desktop.iso)" ]; then echo IDENTICAL | tee cmp/result.txt; else echo DIFFERENT | tee cmp/result.txt; fi
+            cmp -l first/oleka-desktop.iso oleka-desktop.iso | wc -l | tee cmp/differing-bytes.txt || true
+      - store_artifacts:
+          path: cmp
+          destination: cmp
 workflows:
   build:
     jobs:
@@ -77,4 +107,6 @@ workflows:
       - boot-test:
           requires: [build-iso]
       - screenshots:
+          requires: [build-iso]
+      - repro-check:
           requires: [build-iso]
