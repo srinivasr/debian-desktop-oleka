@@ -8,7 +8,7 @@ default_border pixel 2
 gaps inner 8
 gaps outer 4
 
-output * bg $bg solid_color
+output * bg /usr/share/backgrounds/oleka.png fill $bg
 input type:keyboard xkb_layout us
 input type:touchpad tap enabled
 
@@ -40,3 +40,6 @@ bar {
 }
 
 exec_always sh -c 'pgrep -x oleka-welcome || oleka-welcome'
+
+# Demo mode (boot with oleka.demo on the kernel command line): open a terminal and the launcher.
+exec sh -c 'grep -q oleka.demo /proc/cmdline && { foot & sleep 3; oleka-launcher; }'

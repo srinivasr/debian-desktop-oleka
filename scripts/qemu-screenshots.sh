@@ -10,7 +10,7 @@ xorriso -osirrox on -indev "$ISO" -extract /live kx 2>&1 | tail -1
 KER=$(ls kx/vmlinuz* | head -1); INI=$(ls kx/initrd* | head -1)
 rm -f /tmp/mon.sock
 qemu-system-x86_64 -m 3072 -smp 4 $ACCEL -cdrom "$ISO" -boot d -kernel "$KER" -initrd "$INI" \
-  -append "boot=live components username=oleka hostname=oleka-desktop console=tty0 console=ttyS0,115200" \
+  -append "boot=live components oleka.demo username=oleka hostname=oleka-desktop console=tty0 console=ttyS0,115200" \
   -vga virtio -display none -serial file:"$OUT/serial.log" \
   -monitor unix:/tmp/mon.sock,server,nowait -daemonize -pidfile /tmp/qemu.pid
 n=0

@@ -5,6 +5,7 @@ window#waybar { background: transparent; color: @text; }
 #workspaces button { color: @muted; padding: 0 8px; background: transparent; border: none; }
 #workspaces button.focused { color: @bg; background: @accent; }
 #workspaces button.urgent { background: @urgent; color: @bg; }
+#clock { min-width: 60px; }
 #clock, #network, #pulseaudio, #battery, #custom-oleka-status { padding: 0 10px; }
 #battery.warning { color: @warn; }
 #battery.critical { color: @urgent; }

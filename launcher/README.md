@@ -38,5 +38,7 @@ Copy it to `~/.config/oleka-launcher/style.css` to override.
 Written for this project. It uses the freedesktop Desktop Entry format and the GTK and gtk-layer-shell APIs.
 
 ## Tested
-Unit tests (6, pass). GUI run under Xvfb with typing, arrows and Enter, launch recorded.
-Not tested: real Wayland layer-shell (centering, focus) on a Debian live image.
+Unit tests (6, pass). GUI run under Xvfb with typing, arrows and Enter, launch recorded. A CI screenshot of the
+Oleka ISO booted in QEMU shows the launcher open as a layer-shell overlay listing apps with icons.
+Not tested: typing into the launcher on the real ISO (only the open window is seen), and exact centering and focus
+behaviour on other compositors.

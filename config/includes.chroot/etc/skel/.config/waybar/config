@@ -7,7 +7,7 @@
   "modules-center": ["clock"],
   "modules-right": ["custom/oleka-status", "pulseaudio", "network", "battery"],
   "sway/workspaces": { "disable-scroll": true, "format": "{name}" },
-  "clock": { "format": "{:%a %d %b  %H:%M}", "tooltip-format": "{:%A %d %B %Y}" },
+  "clock": { "format": "{:%H:%M}", "tooltip-format": "{:%A %d %B %Y}" },
   "network": { "format-wifi": "wifi {signalStrength}%", "format-ethernet": "eth", "format-disconnected": "offline" },
   "pulseaudio": { "format": "vol {volume}%", "format-muted": "muted" },
   "battery": { "format": "bat {capacity}%", "states": { "warning": 25, "critical": 10 } },
