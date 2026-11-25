@@ -8,7 +8,16 @@ LOG=qemu-serial.log
 ACCEL="-accel tcg"
 if [ -w /dev/kvm ]; then ACCEL="-accel kvm"; fi
 echo "qemu accel: $ACCEL, iso: $(ls -l "$ISO")"
-qemu-system-x86_64 -m 2048 -smp 4 $ACCEL -cdrom "$ISO" -boot d \
+# Boot the kernel straight from the ISO so we control the console and skip the
+# isolinux menu (which has no serial output and can wait for a key).
+which xorriso >/dev/null 2>&1 || sudo apt-get install -y xorriso >/dev/null
+rm -rf kx && mkdir kx
+xorriso -osirrox on -indev "$ISO" -extract /live kx 2>&1 | tail -2
+KER=$(ls kx/vmlinuz* | head -1); INI=$(ls kx/initrd* | head -1)
+echo "kernel=$KER initrd=$INI"
+qemu-system-x86_64 -m 3072 -smp 4 $ACCEL -cdrom "$ISO" -boot d \
+  -kernel "$KER" -initrd "$INI" \
+  -append "boot=live components console=ttyS0,115200 earlyprintk=serial,ttyS0 systemd.show_status=1 nomodeset" \
   -display none -serial "file:$LOG" -no-reboot \
   -daemonize -pidfile /tmp/qemu.pid 2>&1
 rc=$?

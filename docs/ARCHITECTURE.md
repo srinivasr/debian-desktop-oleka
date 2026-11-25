@@ -27,7 +27,8 @@ waybar is customised, not forked. We changed its config and CSS, gave it the sha
 `oleka-status`, that shows memory use and load. No waybar source was touched.
 
 The boot self-test is a systemd service, `oleka-boot-check`. It checks that the binaries and theme files exist, starts
-sway headless, and prints `OLEKA-BOOT-OK` on the serial console. `scripts/qemu-test.sh` waits for that line. A pass means the image boots and sway starts. It
+sway headless, and prints `OLEKA-BOOT-OK` on the serial console. `scripts/qemu-test.sh` boots the kernel and initrd
+straight from the ISO with a serial console and waits for that line. A pass means the image boots and sway starts. It
 says nothing about how the desktop looks.
 
 ## Known gaps
