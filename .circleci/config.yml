@@ -93,8 +93,8 @@ jobs:
             sha256sum first/oleka-desktop.iso oleka-desktop.iso | tee cmp/sums.txt
             xorriso -osirrox on -indev first/oleka-desktop.iso -extract /live a 2>/dev/null || true
             xorriso -osirrox on -indev oleka-desktop.iso -extract /live b 2>/dev/null || true
-            (cd a && sha256sum * ) | sed 's|  | first/live/|' | tee -a cmp/sums.txt
-            (cd b && sha256sum * ) | sed 's|  | second/live/|' | tee -a cmp/sums.txt
+            (cd a/live && sha256sum * | sed 's|  | first/live/|') | tee -a cmp/sums.txt || true
+            (cd b/live && sha256sum * | sed 's|  | second/live/|') | tee -a cmp/sums.txt || true
             if cmp -s first/oleka-desktop.iso oleka-desktop.iso; then echo IDENTICAL > cmp/result.txt; else echo DIFFERENT > cmp/result.txt; fi
             cat cmp/result.txt
             cmp -l first/oleka-desktop.iso oleka-desktop.iso | wc -l > cmp/differing-bytes.txt || true
