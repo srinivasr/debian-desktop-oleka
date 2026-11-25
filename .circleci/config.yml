@@ -89,14 +89,15 @@ jobs:
       - run:
           name: Compare the two builds
           command: |
-            mkdir -p cmp
+            mkdir -p cmp a b
             sha256sum first/oleka-desktop.iso oleka-desktop.iso | tee cmp/sums.txt
-            for i in first/oleka-desktop.iso oleka-desktop.iso; do
-              mkdir -p x$$; xorriso -osirrox on -indev $i -extract /live/filesystem.squashfs x$$/$(basename $(dirname $i)).squashfs 2>/dev/null || true
-            done
-            sha256sum x*/*.squashfs | tee -a cmp/sums.txt
-            if [ "$(sha256sum < first/oleka-desktop.iso)" = "$(sha256sum < oleka-desktop.iso)" ]; then echo IDENTICAL | tee cmp/result.txt; else echo DIFFERENT | tee cmp/result.txt; fi
-            cmp -l first/oleka-desktop.iso oleka-desktop.iso | wc -l | tee cmp/differing-bytes.txt || true
+            xorriso -osirrox on -indev first/oleka-desktop.iso -extract /live/filesystem.squashfs a/fs.squashfs 2>/dev/null || true
+            xorriso -osirrox on -indev oleka-desktop.iso -extract /live/filesystem.squashfs b/fs.squashfs 2>/dev/null || true
+            sha256sum a/fs.squashfs b/fs.squashfs | tee -a cmp/sums.txt || true
+            if cmp -s first/oleka-desktop.iso oleka-desktop.iso; then echo IDENTICAL > cmp/result.txt; else echo DIFFERENT > cmp/result.txt; fi
+            cat cmp/result.txt
+            cmp -l first/oleka-desktop.iso oleka-desktop.iso | wc -l > cmp/differing-bytes.txt || true
+            cat cmp/differing-bytes.txt
       - store_artifacts:
           path: cmp
           destination: cmp

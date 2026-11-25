@@ -25,9 +25,10 @@ Login is automatic (user `oleka`, no password on the live image).
 ## Reproducibility
 
 The package set is pinned to a snapshot.debian.org timestamp (`SNAPSHOT`, default
-`20251101T000000Z`) and timestamps are fixed with `SOURCE_DATE_EPOCH` (last commit time).
-The same commit and snapshot give the same package set. I have not verified bit-identical ISOs
-across two builds. Differences may come from squashfs/xorriso ordering. See `docs/ARCHITECTURE.md`.
+`20251101T000000Z`) and `SOURCE_DATE_EPOCH` is set to the last commit time, so the same commit gives the same
+packages. The ISO itself is not bit-identical: two builds of commit bf77b72 on CircleCI produced different
+SHA-256 hashes. The `repro-check` CI job rebuilds and compares, and stores the result as an artifact. I have not yet
+found which part of the image differs.
 
 ## Keys
 
