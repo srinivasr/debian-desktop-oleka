@@ -9,6 +9,8 @@ A small Debian-based live ISO with a Wayland desktop. Built for the Oleka Labs t
 - Launcher: `oleka-launcher`, written from scratch in this repo (`launcher/`)
 - Theme: one palette file, `theme/palette.toml`, rendered into every component
 
+Demo: [demo.mp4](https://github.com/s0mth1n/debian-desktop-oleka/releases/download/v1.0/demo.mp4), a sped-up recording (about 2 min, no audio) of the real ISO in QEMU on CI.
+
 ## Build and test
 
 CircleCI builds the ISO and boot-tests it on every push (`.circleci/config.yml`). The GitHub Actions workflow
