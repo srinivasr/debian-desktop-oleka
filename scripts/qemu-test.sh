@@ -8,7 +8,7 @@ LOG=qemu-serial.log
 ACCEL="-accel tcg"
 if [ -w /dev/kvm ]; then ACCEL="-accel kvm"; fi
 echo "qemu accel: $ACCEL, iso: $(ls -l "$ISO")"
-qemu-system-x86_64 -m 2048 -smp 2 $ACCEL -cdrom "$ISO" -boot d \
+qemu-system-x86_64 -m 2048 -smp 4 $ACCEL -cdrom "$ISO" -boot d \
   -display none -serial "file:$LOG" -no-reboot \
   -daemonize -pidfile /tmp/qemu.pid 2>&1
 rc=$?
@@ -23,6 +23,8 @@ while [ $i -lt 180 ]; do
     echo "FAIL:"; grep -E "OLEKA-" "$LOG"; kill "$(cat /tmp/qemu.pid)"; exit 1
   fi
   sleep 5; i=$((i+1))
+  # heartbeat so CI does not think we hung
+  [ $((i % 6)) = 0 ] && echo "waiting $((i*5))s, serial log $(wc -c < "$LOG") bytes, last: $(tail -c 120 "$LOG" | tr -d '\r' | tail -n 1)"
 done
 echo "FAIL: no marker in 900s. Serial log tail:"; tail -40 "$LOG"
 kill "$(cat /tmp/qemu.pid)" 2>/dev/null; exit 1

@@ -1,4 +1,5 @@
 # Same pipeline as .github/workflows/build.yml, for CircleCI (free plan works for private repos).
+# Two jobs so a failed boot test can be re-run without rebuilding the ISO.
 version: 2.1
 jobs:
   build-iso:
@@ -22,17 +23,38 @@ jobs:
               git config --global --add safe.directory /w &&
               sh scripts/build.sh'
       - run:
+          name: Keep only the ISO files
+          command: mkdir -p out && cp oleka-desktop.iso oleka-desktop.sha256 out/
+      - persist_to_workspace:
+          root: out
+          paths: [oleka-desktop.iso, oleka-desktop.sha256]
+      - store_artifacts:
+          path: out/oleka-desktop.sha256
+  boot-test:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install QEMU
+          command: sudo apt-get update && sudo apt-get install -y qemu-system-x86
+      - run:
           name: QEMU boot test
-          command: |
-            sudo apt-get update && sudo apt-get install -y qemu-system-x86
-            sh scripts/qemu-test.sh oleka-desktop.iso
+          no_output_timeout: 30m
+          command: sh scripts/qemu-test.sh oleka-desktop.iso
+      - run:
+          name: Save serial log
+          when: always
+          command: mkdir -p logs && cp qemu-serial.log logs/ || true
       - store_artifacts:
-          path: qemu-serial.log
-      - store_artifacts:
-          path: oleka-desktop.sha256
-      - store_artifacts:
-          path: oleka-desktop.iso
+          path: logs
+          destination: logs
 workflows:
   build:
     jobs:
       - build-iso
+      - boot-test:
+          requires: [build-iso]
