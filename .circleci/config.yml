@@ -52,9 +52,29 @@ jobs:
       - store_artifacts:
           path: logs
           destination: logs
+  screenshots:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install QEMU and tools
+          command: sudo apt-get update && sudo apt-get install -y qemu-system-x86 xorriso netcat-openbsd imagemagick
+      - run:
+          name: Boot and take desktop screenshots
+          no_output_timeout: 30m
+          command: sh scripts/qemu-screenshots.sh oleka-desktop.iso shots
+      - store_artifacts:
+          path: shots
+          destination: shots
 workflows:
   build:
     jobs:
       - build-iso
       - boot-test:
+          requires: [build-iso]
+      - screenshots:
           requires: [build-iso]
